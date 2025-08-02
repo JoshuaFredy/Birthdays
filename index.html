@@ -1,553 +1,197 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SARA's Birthday Countdown ✨</title>
-    <meta name="description" content="A magical birthday countdown for Sara">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@400;700&family=Playfair+Display:wght@400;700&display=swap" rel="stylesheet">
-    
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>SARA's Birthday Countdown 🎂</title>
+  <link href="https://fonts.googleapis.com/css2?family=Pacifico&family=Poppins:wght@300;600&display=swap" rel="stylesheet">
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Poppins', sans-serif;
+      background: linear-gradient(120deg, #1e3a8a, #9333ea);
+      color: white;
+      overflow: hidden;
+    }
 
-        body {
-            font-family: 'Playfair Display', serif;
-            min-height: 100vh;
-            overflow-x: hidden;
-            background: linear-gradient(135deg, #fce7f3 0%, #faf5ff 50%, #dbeafe 100%);
-            position: relative;
-        }
+    .container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      text-align: center;
+      padding: 1rem;
+    }
 
-        .bg-animated {
-            position: absolute;
-            inset: 0;
-            background: linear-gradient(135deg, rgba(236, 72, 153, 0.1) 0%, rgba(147, 51, 234, 0.15) 50%, rgba(59, 130, 246, 0.1) 100%);
-            animation: pulse 4s ease-in-out infinite;
-        }
+    h1 {
+      font-size: 3rem;
+      font-family: 'Pacifico', cursive;
+      animation: glow 2s ease-in-out infinite alternate;
+    }
 
-        .sparkles-container {
-            position: absolute;
-            inset: 0;
-            overflow: hidden;
-            pointer-events: none;
-        }
+    #countdown {
+      display: flex;
+      gap: 1.5rem;
+      font-size: 2rem;
+      margin-top: 1rem;
+      animation: fade-in 2s;
+    }
 
-        .sparkle {
-            position: absolute;
-            color: #fde047;
-            opacity: 0.7;
-            animation: sparkle-float 3s ease-in-out infinite;
-            font-size: 16px;
-        }
+    .time {
+      background: rgba(255, 255, 255, 0.1);
+      padding: 1rem;
+      border-radius: 1rem;
+      min-width: 80px;
+      box-shadow: 0 0 10px #fff;
+    }
 
-        .main-content {
-            position: relative;
-            z-index: 10;
-            min-height: 100vh;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            padding: 1rem;
-        }
+    @keyframes glow {
+      from { text-shadow: 0 0 10px #fff, 0 0 20px #f0f, 0 0 30px #f0f; }
+      to { text-shadow: 0 0 20px #0ff, 0 0 30px #0ff, 0 0 40px #0ff; }
+    }
 
-        .countdown-container {
-            text-align: center;
-            margin-bottom: 2rem;
-            animation: fade-in 0.6s ease-out;
-        }
+    @keyframes fade-in {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
 
-        .countdown-title {
-            font-size: clamp(1.5rem, 5vw, 3rem);
-            font-weight: bold;
-            background: linear-gradient(45deg, #ec4899, #8b5cf6, #3b82f6);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-            margin-bottom: 1.5rem;
-            animation: pulse 2s ease-in-out infinite;
-        }
+    @keyframes pulse {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.05); }
+    }
 
-        .countdown-subtitle {
-            font-size: clamp(1rem, 3vw, 1.25rem);
-            color: #7c3aed;
-            opacity: 0.8;
-            font-weight: 300;
-            margin-top: 1rem;
-            animation: pulse 2s ease-in-out infinite;
-        }
+    #musicToggle {
+      position: absolute;
+      bottom: 20px;
+      left: 20px;
+      padding: 0.5rem 1rem;
+      background: rgba(255, 255, 255, 0.1);
+      border: 1px solid white;
+      border-radius: 5px;
+      color: white;
+      cursor: pointer;
+    }
 
-        .countdown-grid {
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: center;
-            gap: 1rem;
-        }
+    .stars {
+      position: absolute;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      pointer-events: none;
+      z-index: 0;
+      background: url('https://media.tenor.com/2roX3uxz_68AAAAC/cute-stars.gif') repeat;
+      background-size: cover;
+      opacity: 0.2;
+    }
 
-        .countdown-item {
-            text-align: center;
-            background: rgba(255, 255, 255, 0.2);
-            backdrop-filter: blur(10px);
-            border-radius: 1rem;
-            padding: 1.5rem;
-            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
-            border: 1px solid rgba(255, 255, 255, 0.3);
-            transition: transform 0.3s ease;
-            min-width: 80px;
-        }
+    /* Surprise page styles */
+    #surprisePage {
+      display: none;
+      position: fixed;
+      top: 0; left: 0;
+      width: 100vw;
+      height: 100vh;
+      background: linear-gradient(135deg, #ff6ec4, #7873f5);
+      color: white;
+      z-index: 9999;
+      text-align: center;
+      justify-content: center;
+      align-items: center;
+      flex-direction: column;
+      padding: 2rem;
+      animation: fade-in 2s ease-in-out;
+    }
 
-        .countdown-item:hover {
-            transform: scale(1.05);
-        }
+    #surprisePage h1 {
+      font-size: 3rem;
+      animation: bounce 2s infinite;
+      font-family: 'Pacifico', cursive;
+    }
 
-        .countdown-number {
-            font-size: clamp(1.5rem, 4vw, 2.5rem);
-            font-weight: bold;
-            color: #7c3aed;
-            margin-bottom: 0.5rem;
-            animation: bounce 2s ease-in-out infinite;
-        }
+    #surprisePage p {
+      font-size: 1.5rem;
+      margin-top: 1rem;
+    }
 
-        .countdown-label {
-            font-size: clamp(0.75rem, 2vw, 1rem);
-            color: #8b5cf6;
-            font-weight: 500;
-            text-transform: capitalize;
-        }
+    #surprisePage .emoji {
+      margin-top: 2rem;
+      font-size: 2rem;
+    }
 
-        .book-container {
-            cursor: pointer;
-            transform: scale(1);
-            transition: transform 0.3s ease;
-        }
+    @keyframes bounce {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-20px); }
+    }
 
-        .book-container:hover {
-            transform: scale(1.05);
-        }
-
-        .book {
-            position: relative;
-            width: 250px;
-            height: 300px;
-            margin: 0 auto;
-        }
-
-        .book-shadow {
-            position: absolute;
-            inset: 0;
-            background: linear-gradient(135deg, rgba(91, 33, 182, 0.2), rgba(219, 39, 119, 0.2));
-            border-radius: 0.5rem;
-            transform: translate(8px, 8px);
-            filter: blur(4px);
-        }
-
-        .book-cover {
-            position: relative;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(135deg, #8b5cf6 0%, #ec4899 50%, #f43f5e 100%);
-            border-radius: 0.5rem;
-            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
-            border: 4px solid #fbbf24;
-            overflow: hidden;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: space-between;
-            padding: 2rem 1rem;
-        }
-
-        .book-texture {
-            position: absolute;
-            inset: 0;
-            background: linear-gradient(135deg, rgba(255, 255, 255, 0.05), transparent);
-        }
-
-        .book-icon {
-            background: rgba(255, 255, 255, 0.2);
-            border-radius: 50%;
-            width: 64px;
-            height: 64px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            backdrop-filter: blur(10px);
-            font-size: 2rem;
-        }
-
-        .book-title {
-            color: white;
-            font-weight: bold;
-            font-size: 1.125rem;
-            margin-bottom: 0.5rem;
-            text-align: center;
-        }
-
-        .book-subtitle {
-            color: rgba(255, 255, 255, 0.8);
-            font-size: 0.875rem;
-            text-align: center;
-        }
-
-        .book-overlay {
-            position: fixed;
-            inset: 0;
-            background: rgba(0, 0, 0, 0.3);
-            backdrop-filter: blur(4px);
-            z-index: 50;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            padding: 1rem;
-            animation: fade-in 0.3s ease-out;
-        }
-
-        .book-open {
-            position: relative;
-            width: 100%;
-            max-width: 800px;
-            height: 100%;
-            max-height: 600px;
-            background: linear-gradient(135deg, #fef3c7 0%, #fed7aa 100%);
-            border-radius: 0.75rem;
-            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
-            border: 4px solid #fbbf24;
-            overflow: hidden;
-            animation: scale-in 0.3s ease-out;
-        }
-
-        .book-pages {
-            position: absolute;
-            inset: 0;
-            background: linear-gradient(90deg, rgba(254, 243, 199, 0.5) 0%, transparent 50%, rgba(254, 243, 199, 0.5) 100%);
-        }
-
-        .book-binding {
-            position: absolute;
-            left: 50%;
-            top: 0;
-            bottom: 0;
-            width: 4px;
-            background: #fbbf24;
-            transform: translateX(-50%);
-        }
-
-        .book-page {
-            position: absolute;
-            top: 0;
-            width: 50%;
-            height: 100%;
-            padding: 3rem 2rem;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            text-align: center;
-        }
-
-        .book-page-left {
-            left: 0;
-        }
-
-        .book-page-right {
-            right: 0;
-        }
-
-        .page-emoji {
-            font-size: 4rem;
-            margin-bottom: 1.5rem;
-            animation: bounce 2s ease-in-out infinite;
-        }
-
-        .page-heading {
-            font-size: clamp(1.25rem, 3vw, 2rem);
-            color: #7c3aed;
-            margin-bottom: 1rem;
-        }
-
-        .page-text {
-            font-size: clamp(1rem, 2.5vw, 1.25rem);
-            color: #8b5cf6;
-            font-weight: 300;
-            line-height: 1.5;
-        }
-
-        .page-heart {
-            font-size: 2.5rem;
-            margin-top: 2rem;
-            animation: pulse 2s ease-in-out infinite;
-        }
-
-        .close-button {
-            position: absolute;
-            top: 1rem;
-            right: 1rem;
-            background: rgba(255, 255, 255, 0.8);
-            border: none;
-            border-radius: 50%;
-            width: 48px;
-            height: 48px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
-        }
-
-        .close-button:hover {
-            background: white;
-            transform: scale(1.1);
-        }
-
-        .close-button svg {
-            width: 20px;
-            height: 20px;
-            color: #7c3aed;
-        }
-
-        .hidden {
-            display: none !important;
-        }
-
-        /* Animations */
-        @keyframes pulse {
-            0%, 100% { opacity: 1; }
-            50% { opacity: 0.7; }
-        }
-
-        @keyframes bounce {
-            0%, 20%, 53%, 80%, 100% { transform: translateY(0); }
-            40%, 43% { transform: translateY(-10px); }
-            70% { transform: translateY(-5px); }
-            90% { transform: translateY(-2px); }
-        }
-
-        @keyframes fade-in {
-            0% { opacity: 0; transform: translateY(10px); }
-            100% { opacity: 1; transform: translateY(0); }
-        }
-
-        @keyframes scale-in {
-            0% { transform: scale(0.9); opacity: 0; }
-            100% { transform: scale(1); opacity: 1; }
-        }
-
-        @keyframes sparkle-float {
-            0%, 100% { transform: translateY(0px) rotate(0deg); opacity: 0.7; }
-            50% { transform: translateY(-10px) rotate(180deg); opacity: 1; }
-        }
-
-        /* Responsive design */
-        @media (max-width: 768px) {
-            .book {
-                width: 200px;
-                height: 240px;
-            }
-            
-            .book-page {
-                padding: 2rem 1rem;
-            }
-            
-            .countdown-grid {
-                gap: 0.5rem;
-            }
-            
-            .countdown-item {
-                padding: 1rem;
-                min-width: 70px;
-            }
-        }
-    </style>
+  </style>
 </head>
 <body>
-    <audio id="bg-music" src="BSong.mp3" autoplay loop></audio>
-
-    <div class="bg-animated"></div>
-    
-    <div class="sparkles-container" id="sparkles"></div>
-    
-    <div class="main-content">
-        <div class="countdown-container" id="countdownContainer">
-            <h2 class="countdown-title">Advance Birthday Wishes SARA✨</h2>
-            
-            <div class="countdown-grid" id="countdown">
-                <div class="countdown-item">
-                    <div class="countdown-number" id="days">00</div>
-                    <div class="countdown-label">days</div>
-                </div>
-                <div class="countdown-item">
-                    <div class="countdown-number" id="hours">00</div>
-                    <div class="countdown-label">hours</div>
-                </div>
-                <div class="countdown-item">
-                    <div class="countdown-number" id="minutes">00</div>
-                    <div class="countdown-label">minutes</div>
-                </div>
-                <div class="countdown-item">
-                    <div class="countdown-number" id="seconds">00</div>
-                    <div class="countdown-label">seconds</div>
-                </div>
-            </div>
-            
-            <p class="countdown-subtitle">Counting down to your magical day, S A R A 💖</p>
-        </div>
-        
-        <div class="book-container" id="bookContainer" onclick="openBook()">
-            <div class="book">
-                <div class="book-shadow"></div>
-                <div class="book-cover">
-                    <div class="book-texture"></div>
-                    <div class="book-icon">📖</div>
-                    <div>
-                        <h3 class="book-title">A Special Message</h3>
-                        <p class="book-subtitle">Click to open ✨</p>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <button id="music-toggle" style="
-    position: fixed;
-    bottom: 1rem;
-    right: 1rem;
-    background-color: rgba(255,255,255,0.6);
-    border: none;
-    border-radius: 50%;
-    width: 48px;
-    height: 48px;
-    box-shadow: 0 4px 8px rgba(0,0,0,0.2);
-    cursor: pointer;
-    font-size: 1.25rem;
-    z-index: 100;
-">🔊</button>
-
+  <div class="stars"></div>
+  <div class="container" id="mainContent">
+    <h1>Countdown to Sara's Birthday 🎉</h1>
+    <div id="countdown">
+      <div class="time"><span id="days">0</span><br>Days</div>
+      <div class="time"><span id="hours">0</span><br>Hours</div>
+      <div class="time"><span id="minutes">0</span><br>Minutes</div>
+      <div class="time"><span id="seconds">0</span><br>Seconds</div>
     </div>
-    
-    <div class="book-overlay hidden" id="bookOverlay" onclick="closeBook()">
-        <div class="book-open" onclick="event.stopPropagation()">
-            <div class="book-pages"></div>
-            <div class="book-binding"></div>
-            
-            <div class="book-page book-page-left">
-                <div class="page-emoji">🎂</div>
-                <h2 class="page-heading">Just a little early wish
-                    for someone truly unforgettable 💫</h2>
-                <!-- <p class="page-text">lights up every room...</p> -->
-            </div>
-            
-            <div class="book-page book-page-right">
-                <h2 class="page-heading">Advance wishes Shaluuu! 🎉</h2>
-                <p class="page-text">Birthday-ku munnadiye hype build pannitu iruken 😎..Treat Mukiyam🤤</p>
-                <div class="page-heart">💖</div>
-            </div>
-            
-            <button class="close-button" onclick="closeBook()">
-                <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
-                </svg>
-            </button>
-        </div>
-    </div>
+  </div>
 
+  <!-- Surprise Page -->
+  <div id="surprisePage" class="container">
+    <h1>🎉 Happy Birthday SARA! 🎂</h1>
+    <p>May your day be as magical as you are! ✨</p>
+    <p style="margin-top: 1rem; font-style: italic;">You’ll always be someone special to me. I still miss you a lot🥹💖</p>
+    <div class="emoji">💖💫🎁🎈🎊</div>
+  </div>
 
-    <script>
-        // Countdown Timer Logic
-        function updateCountdown() {
-            const targetDate = new Date('2025-08-03T00:00:00').getTime();
-            const now = new Date().getTime();
-            const difference = targetDate - now;
+  <button id="musicToggle">🔊 Toggle Music</button>
+  <audio id="bgMusic" loop autoplay>
+    <source src="https://www.fesliyanstudios.com/play-mp3/387" type="audio/mpeg">
+    Your browser does not support the audio element.
+  </audio>
 
-            if (difference > 0) {
-                const days = Math.floor(difference / (1000 * 60 * 60 * 24));
-                const hours = Math.floor((difference % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-                const minutes = Math.floor((difference % (1000 * 60 * 60)) / (1000 * 60));
-                const seconds = Math.floor((difference % (1000 * 60)) / 1000);
+  <script>
+    const countdown = () => {
+      const targetDate = new Date("2025-08-03T00:00:00").getTime();
+      const now = new Date().getTime();
+      const gap = targetDate - now;
 
-                document.getElementById('days').textContent = days.toString().padStart(2, '0');
-                document.getElementById('hours').textContent = hours.toString().padStart(2, '0');
-                document.getElementById('minutes').textContent = minutes.toString().padStart(2, '0');
-                document.getElementById('seconds').textContent = seconds.toString().padStart(2, '0');
-            }
-        }
+      const second = 1000;
+      const minute = second * 60;
+      const hour = minute * 60;
+      const day = hour * 24;
 
-        // Update countdown every second
-        updateCountdown();
-        setInterval(updateCountdown, 1000);
+      const d = Math.floor(gap / day);
+      const h = Math.floor((gap % day) / hour);
+      const m = Math.floor((gap % hour) / minute);
+      const s = Math.floor((gap % minute) / second);
 
-        // Floating Sparkles
-        function createSparkles() {
-            const sparklesContainer = document.getElementById('sparkles');
-            
-            for (let i = 0; i < 20; i++) {
-                const sparkle = document.createElement('div');
-                sparkle.className = 'sparkle';
-                sparkle.textContent = '✨';
-                sparkle.style.left = Math.random() * 100 + '%';
-                sparkle.style.top = Math.random() * 100 + '%';
-                sparkle.style.animationDelay = Math.random() * 3 + 's';
-                sparkle.style.animationDuration = (2 + Math.random() * 3) + 's';
-                sparklesContainer.appendChild(sparkle);
-            }
-        }
+      document.getElementById("days").innerText = d;
+      document.getElementById("hours").innerText = h;
+      document.getElementById("minutes").innerText = m;
+      document.getElementById("seconds").innerText = s;
 
-        // Book functionality
-        function openBook() {
-            document.getElementById('bookOverlay').classList.remove('hidden');
-            document.getElementById('countdownContainer').style.display = 'none';
-        }
+      if (gap <= 0) {
+        clearInterval(interval);
+        document.getElementById("mainContent").style.display = "none";
+        document.getElementById("surprisePage").style.display = "flex";
+      }
+    };
 
-        function closeBook() {
-            document.getElementById('bookOverlay').classList.add('hidden');
-            document.getElementById('countdownContainer').style.display = 'block';
-        }
+    let interval = setInterval(countdown, 1000);
 
-        // Initialize sparkles when page loads
-        window.addEventListener('load', createSparkles);
-
-        // Close book when pressing Escape key
-        document.addEventListener('keydown', function(event) {
-            if (event.key === 'Escape') {
-                closeBook();
-            }
-        });
-    </script>
-    <script>
-        const bgMusic = document.getElementById('bg-music');
-        const musicToggle = document.getElementById('music-toggle');
-        let isPlaying = false;
-    
-        function playMusic() {
-            bgMusic.play().then(() => {
-                isPlaying = true;
-                musicToggle.textContent = '🔊';
-            }).catch((e) => {
-                console.log('Autoplay failed. Waiting for user interaction.');
-            });
-        }
-    
-        musicToggle.addEventListener('click', () => {
-            if (isPlaying) {
-                bgMusic.pause();
-                musicToggle.textContent = '🔈';
-            } else {
-                bgMusic.play();
-                musicToggle.textContent = '🔊';
-            }
-            isPlaying = !isPlaying;
-        });
-    
-        // Try to autoplay after first user click anywhere on body
-        document.body.addEventListener('click', () => {
-            if (!isPlaying) {
-                playMusic();
-            }
-        }, { once: true });
-    </script>
-    
+    const music = document.getElementById("bgMusic");
+    const toggleBtn = document.getElementById("musicToggle");
+    toggleBtn.addEventListener("click", () => {
+      if (music.paused) {
+        music.play();
+        toggleBtn.textContent = "🔊 Toggle Music";
+      } else {
+        music.pause();
+        toggleBtn.textContent = "🔇 Toggle Music";
+      }
+    });
+  </script>
 </body>
 </html>
